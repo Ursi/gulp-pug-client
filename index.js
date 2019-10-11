@@ -3,7 +3,7 @@ const
 	Vinyl = require(`vinyl`),
 	{Transform} = require(`stream`);
 
-module.exports = function pugClient(options = {}) {
+module.exports = function(options = {}) {
 	const
 		{
 			name = `pug`,
@@ -44,29 +44,31 @@ module.exports = function pugClient(options = {}) {
 	return new Transform({
 		objectMode: true,
 		flush(callback) {
-			let bigPug = `case ${pugClientOptions.self ? `self.` : ``}__pug_template_name\n`;
-			for (let i = 0; i < pugs.length; i++) {
-				bigPug += ii`1
-					when '${pugs[i].name}'
-						${pugs[i].pug}\n
-				`;
+			if (pugs.length) {
+				let bigPug = `case ${pugClientOptions.self ? `self.` : ``}__pug_template_name\n`;
+				for (let i = 0; i < pugs.length; i++) {
+					bigPug += ii`1
+						when '${pugs[i].name}'
+							${pugs[i].pug}\n
+					`;
+				}
+
+				const pwd = process.cwd();
+				process.chdir(dir);
+					const pugFunction = pug.compileClient(bigPug, pugClientOptions);
+				process.chdir(pwd);
+
+				this.push(new Vinyl({
+					path: `./${name}.js`,
+					contents: Buffer.from(ii`
+						${module === true ? `export default ` : ``}function ${name}(name, locals) {
+							${pugFunction}
+
+							return template(Object.assign({__pug_template_name: name}, locals));
+						}
+					`),
+				}));
 			}
-
-			const pwd = process.cwd();
-			process.chdir(dir);
-				const pugFunction = pug.compileClient(bigPug, pugClientOptions);
-			process.chdir(pwd);
-
-			this.push(new Vinyl({
-				path: `./${name}.js`,
-				contents: Buffer.from(ii`
-					${module === true ? `export default ` : ``}function ${name}(name, locals) {
-						${pugFunction}
-
-						return template(Object.assign({__pug_template_name: name}, locals));
-					}
-				`),
-			}));
 
 			callback();
 		},
