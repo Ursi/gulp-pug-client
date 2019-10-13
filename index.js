@@ -61,10 +61,17 @@ module.exports = function(options = {}) {
 				this.push(new Vinyl({
 					path: `./${name}.js`,
 					contents: Buffer.from(ii`
-						${module === true ? `export default ` : ``}function ${name}(name, locals) {
+						${module === true ? `export default ` : ``}function ${name}(name, locals, string = false) {
 							${pugFunction}
 
-							return template(Object.assign({__pug_template_name: name}, locals));
+							const html = template(Object.assign({__pug_template_name: name}, locals));
+							if (string) {
+								return html;
+							} else {
+								const templateElem = document.createElement('template');
+								templateElem.innerHTML = html;
+								return templateElem.content;
+							}
 						}
 					`),
 				}));
