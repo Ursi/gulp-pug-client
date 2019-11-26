@@ -1,6 +1,6 @@
 {
   "name": "gulp-pug-client",
-  "version": "2.1.0-alpha.0",
+  "version": "2.1.0-alpha.1",
   "description": "Use Pug's compileClient to make a single function that can access all your templates.",
   "main": "index.js",
   "scripts": {
