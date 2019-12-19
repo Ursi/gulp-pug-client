@@ -15,7 +15,7 @@
   "author": "Mason Mackaman",
   "license": "ISC",
   "dependencies": {
-    "pug-client": "^1.1.0-alpha.2",
+    "pug-client": "github:ursi/pug-client#v1.1.0-alpha.3",
     "vinyl": "^2.2.0"
   },
   "devDependencies": {},
